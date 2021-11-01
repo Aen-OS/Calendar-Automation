@@ -2,28 +2,50 @@ from datetime import datetime, timedelta
 from cal_setup import get_calendar_service
 import requests
 from bs4 import BeautifulSoup
+from datetime import date
 
-url ="https://www.muslimpro.com/en/prayer-times"
+url ="https://www.muslimpro.com/en/prayer-times?date=&convention=UIPTL"
 page = requests.get(url)
 
 soup = BeautifulSoup(page.content, "html.parser")
 
-for x in soup.findAll('tr', {'class':'active'}):
-    data = x.text
-    date = data[0:10]
-    fajr = data[10:15]
-    fajr = fajr.replace(":","")
-    sunrise = data[15:20]
-    sunrise = sunrise.replace(":","")
-    dhuhr = data[20:25]
-    dhuhr = dhuhr.replace(":","")
-    asr = data[25:30]
-    asr = asr.replace(":","")
-    maghrib = data[30:35]
-    maghrib = maghrib.replace(":","")
-    isha = data[35:40]
-    isha = isha.replace(":","")
-    print(date)
+today = date.today()
+d1 = today.strftime("%d/%m/%Y")
+
+if d1[0:1] == "0":
+    for x in soup.findAll('tr', {'class':'active'}):
+        data = x.text
+        date = data[0:9]
+        fajr = data[9:14]
+        fajr = fajr.replace(':','')
+        sunrise = data[14:19]
+        sunrise = sunrise.replace(':','')
+        dhuhr = data[19:24]
+        dhuhr = dhuhr.replace(':','')
+        asr = data[24:29]
+        asr = asr.replace(':','')
+        maghrib = data[29:34]
+        maghrib = maghrib.replace(':','')
+        isha = data[34:39]
+        isha = isha.replace(':','')
+else:
+    for x in soup.findAll('tr', {'class': 'active'}):
+        data = x.text
+        date = data[0:10]
+        fajr = data[10:15]
+        fajr = fajr.replace(":", "")
+        sunrise = data[15:20]
+        sunrise = sunrise.replace(":", "")
+        dhuhr = data[20:25]
+        dhuhr = dhuhr.replace(":", "")
+        asr = data[25:30]
+        asr = asr.replace(":", "")
+        maghrib = data[30:35]
+        maghrib = maghrib.replace(":", "")
+        isha = data[35:40]
+        isha = isha.replace(":", "")
+        print(date)
+
 
 def main_fajr():
    # creates event for prayer times in same day.
